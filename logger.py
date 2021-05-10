@@ -1,9 +1,10 @@
 def LogOutput():
     import logging
-    logging.basicConfig()
-    logger = logging.getLogger('assistant')
-    logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(filename='assistant.log', encoding='utf-8', mode='w')
-    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-    logger.addHandler(handler)
+    logger = logging.getLogger('')
+    logger.setLevel(logging.CRITICAL)
+    fh = logging.FileHandler('my_log_info.log')
+    formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s', datefmt='%a, %d %b %Y %H:%M:%S')
+    fh.setFormatter(formatter)
+
+    logger.addHandler(fh)
 

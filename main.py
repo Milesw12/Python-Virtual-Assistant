@@ -1,14 +1,9 @@
-import speech_recognition as sr
-import pyttsx3
-import pyaudio
-import random
-from logger import LogOutput
-import datetime
-import calendar
-import getpass
+from import_list import *
 
 
 engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voices', voices[0].id) 
 
 LogOutput()
 
@@ -104,9 +99,9 @@ while True:
         get_date = getDate()
         responses = responses + ' ' + get_date
 
-    if 'what is my name' or 'who am i' in text:
+    if 'name' or 'who am i' in text:
         user = getpass.getuser()
-        responses = responses + ' ' + user
+        responses = responses + 'You are ' + user
 
     else:
         responses = responses + "I'm sorry i can't do that yet" 
