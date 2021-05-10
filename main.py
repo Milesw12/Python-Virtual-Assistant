@@ -31,8 +31,8 @@ def recordAudio():
     engine.say("Set minimum energy threshold to {}".format(round(r.energy_threshold, 2)))
     engine.runAndWait()
     with sr.Microphone() as source:
-        print('Ask something!')
-        engine.say("Ask something")
+        print('say something!')
+        engine.say("say something")
         engine.runAndWait()
         audio = r.listen(source)
     
@@ -133,10 +133,12 @@ while True:
         responses = responses + "I am PiAsst created by Miles"
     
     elif 'Wikipedia' in text:
+        print("please say what you want to search for on wikipedia")
+        assistantResponse('Please say what you want to search for on wikipedia')
+        request = recordAudio()
         assistantResponse('Searching Wikipedia...please wait')
-        term = text.replace("Search wikipedia for ", "")
-        engine.say(term)
-        text = wikipedia.page(term)
+        engine.say(request)
+        text = wikipedia.page(request)
         print(text.content)
         responses = responses + text.content
 
