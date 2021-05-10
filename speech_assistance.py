@@ -13,19 +13,29 @@ def assistantResponse(text):
 
 def recordAudio():
     r = sr.Recognizer()
+    print("A moment of silence, please...")
+    with sr.Microphone() as source: r.adjust_for_ambient_noise(source)
+    print("Set minimum energy threshold to {}".format(r.energy_threshold))
     with sr.Microphone() as source:
+
         print('Ask something!')
         audio = r.listen(source)
-
     data = ''
     try:
+        # recognize speech using Google Speech Recognition
         data = r.recognize_google(audio)
-        print('You said: ' + data)
+
+        # we need some special handling here to correctly print unicode characters to standard output
+        if str is bytes:  # this version of Python uses bytes for strings (Python 2)
+            print(u"You said {}".format(data).encode("utf-8"))
+        else:  # this version of Python uses unicode for strings (Python 3+)
+            print("You said {}".format(data))
     except sr.UnknownValueError:
-        print('Google speech recognition could not understand')
+        print("Oops! Didn't catch that")
     except sr.RequestError as e:
-        print("Request error from google speech recognition")
-    
+        print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
+    except KeyboardInterrupt:
+        pass
     return data
 
 
