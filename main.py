@@ -15,6 +15,7 @@ engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voices', voices[0].id) 
 LogOutput()
+wikipedia.set_lang("en")
 
 def assistantResponse(output):
     engine.say(output)
@@ -129,16 +130,16 @@ while True:
         responses = responses + "I'm fine sir"
 
     elif text == "who are you":
-        responses = responses + "I am PyAsst created by Miles"
+        responses = responses + "I am PiAsst created by Miles"
     
     elif 'Wikipedia' in text:
         assistantResponse('Searching Wikipedia...please wait')
-        text = text.replace("Search wikipedia for ", " ")
-        engine.say(text)
-        result =  wikipedia.search(text)
-        results = wikipedia.summary(text)
-        print(results)
-        responses = responses + "wikipedia says" + results
+        term = text.replace("Search wikipedia for ", "")
+        engine.say(term)
+        text = wikipedia.page(term)
+        print(text.content)
+        responses = responses + text.content
+
 
     
         
