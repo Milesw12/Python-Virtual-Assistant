@@ -1,17 +1,26 @@
-from import_list import *
+import speech_recognition as sr
+import pyttsx3
+import pyaudio
+import random
+from logger import LogOutput
+import datetime
+import calendar
+import getpass
+import wikipedia
+import webbrowser
+import os
 
-
+#engine set up
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voices', voices[0].id) 
-
 LogOutput()
 
 def assistantResponse(output):
     engine.say(output)
     engine.runAndWait()
 
-def recordAudio():
+def FirstRun():
     r = sr.Recognizer()
     print("A moment of silence, please...")
     engine.say("A moment of silence, please...")
@@ -21,6 +30,9 @@ def recordAudio():
     print("Set minimum energy threshold to {}".format(r.energy_threshold))
     engine.say("Set minimum energy threshold to {}".format(round(r.energy_threshold, 2)))
     engine.runAndWait()
+
+def recordAudio():
+    r = sr.Recognizer()
     with sr.Microphone() as source:
 
         print('Ask something!')
@@ -31,24 +43,23 @@ def recordAudio():
     data = ''
     try:
         # recognize speech using Google Speech Recognition
-        data = r.recognize_google(audio)
+        data = sr.recognize_google(audio)
 
         # we need some special handling here to correctly print unicode characters to standard output
         output = ("You said {}".format(data))
         print(output)
         assistantResponse(output)
     except sr.UnknownValueError:
-        output = ("Oops! Didn't catch that")
+        output = ("Oops! Didn't catch that, say that again sir.")
         print(output)
         assistantResponse(output)
     except sr.RequestError as e:
-        output = ("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
+        output = ("Uh oh! I Couldn't request results from the Google Speech Recognition service; {0}".format(e))
         print(output)
         assistantResponse(output)
     except KeyboardInterrupt:
         pass
     return data
-
 
 def greetings(text):
     Greeting_Inputs = ['hi', 'hey', 'hola', 'bonjour', 'hello']
@@ -69,7 +80,6 @@ def wakeWord(text):
             return True
     return False
 
-
 def getDate():
     now = datetime.datetime.now()
     my_date = datetime.datetime.today()
@@ -84,7 +94,24 @@ def getDate():
 
     return 'Today is ' + weekday + ', ' + month_names[monthNum - 1] + ' the ' + ordinalNumbers[dayNum - 1]
 
+def WishMe():
+    responses = ''
+    hour = int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        responses = responses +  "Good Morning Sir"
+        assistantResponse(responses)
 
+    elif hour>=12 and hour<18:
+        responses = responses + "Good afternoon Sir"
+        assistantResponse(responses)
+
+    else:
+        responses = responses + "Good evening Sir"
+        assistantResponse(responses)
+
+    print(responses)
+FirstRun()
+WishMe()
 while True:
     text = recordAudio()
     responses = ''
@@ -95,16 +122,30 @@ while True:
         except Exception as e:
             responses = responses + ''
 
-    if 'date' in text:
+    elif 'date' in text:
         get_date = getDate()
         responses = responses + ' ' + get_date
 
-    if 'name' or 'who am i' in text:
+    elif "Whats my name" or "who am i" in text:
         user = getpass.getuser()
         responses = responses + 'You are ' + user
+    
+    elif "How are you" in text:
+        responses = responses + "I'm fine sir"
 
+    elif "Who are you" in text:
+        responses = responses + "I am PyAsst created by Miles"
+    
+    elif 'wikipedia' in text:
+        assistantResponse('Searching Wikipedia...please wait')
+        text = text.replace("wikipedia", "")
+        results =  wikipedia.summary(text, sentences = 2)
+        assistantResponse("wikipedia says")
+        assistantResponse(results)
+    
     else:
         responses = responses + "I'm sorry i can't do that yet" 
 
-    assistantResponse(responses)       
+    assistantResponse(responses)
+    print(responses)       
 
