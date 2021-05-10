@@ -21,7 +21,7 @@ def recordAudio():
 
     with sr.Microphone() as source: r.adjust_for_ambient_noise(source)
     print("Set minimum energy threshold to {}".format(r.energy_threshold))
-    engine.say("Set minimum energy threshold to {}".format(round(r.energy_threshold)))
+    engine.say("Set minimum energy threshold to {}".format(round(r.energy_threshold, 2)))
     engine.runAndWait()
     with sr.Microphone() as source:
 
@@ -29,20 +29,16 @@ def recordAudio():
         engine.say("Ask something")
         engine.runAndWait()
         audio = r.listen(source)
+    
     data = ''
     try:
         # recognize speech using Google Speech Recognition
         data = r.recognize_google(audio)
 
         # we need some special handling here to correctly print unicode characters to standard output
-        if str is bytes:  # this version of Python uses bytes for strings (Python 2)
-            output = (u"You said {}".format(data).encode("utf-8"))
-            print(output)
-            assistantResponse(output)
-        else:  # this version of Python uses unicode for strings (Python 3+)
-            output = ("You said {}".format(data))
-            print(output)
-            assistantResponse(output)
+        output = ("You said {}".format(data))
+        print(output)
+        assistantResponse(output)
     except sr.UnknownValueError:
         output = ("Oops! Didn't catch that")
         print(output)
@@ -85,5 +81,8 @@ while True:
             responses = responses + greetings(text)
         except Exception as e:
             responses = responses + ''
-            
+    else:
+        responses = responses + "I'm sorry i can't do that yet" 
+
+    assistantResponse(responses)       
 
