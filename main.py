@@ -20,21 +20,16 @@ def assistantResponse(output):
     engine.say(output)
     engine.runAndWait()
 
-def FirstRun():
+def recordAudio():
     r = sr.Recognizer()
     print("A moment of silence, please...")
     engine.say("A moment of silence, please...")
     engine.runAndWait()
-
     with sr.Microphone() as source: r.adjust_for_ambient_noise(source)
     print("Set minimum energy threshold to {}".format(r.energy_threshold))
     engine.say("Set minimum energy threshold to {}".format(round(r.energy_threshold, 2)))
     engine.runAndWait()
-
-def recordAudio():
-    r = sr.Recognizer()
     with sr.Microphone() as source:
-
         print('Ask something!')
         engine.say("Ask something")
         engine.runAndWait()
@@ -43,7 +38,9 @@ def recordAudio():
     data = ''
     try:
         # recognize speech using Google Speech Recognition
-        data = sr.recognize_google(audio)
+        print("Recognising")
+        engine.say("Recognising")
+        data = r.recognize_google(audio)
 
         # we need some special handling here to correctly print unicode characters to standard output
         output = ("You said {}".format(data))
@@ -110,38 +107,42 @@ def WishMe():
         assistantResponse(responses)
 
     print(responses)
-FirstRun()
+
+
 WishMe()
+
 while True:
     text = recordAudio()
     responses = ''
-    if wakeWord(text.lower()) == True:
-
-        try:
-            responses = responses + greetings(text)
-        except Exception as e:
-            responses = responses + ''
+    if  text == "assistant":
+        responses = responses + greetings(text)
 
     elif 'date' in text:
         get_date = getDate()
         responses = responses + ' ' + get_date
 
-    elif "Whats my name" or "who am i" in text:
+    elif text == "who am I" :
         user = getpass.getuser()
         responses = responses + 'You are ' + user
     
-    elif "How are you" in text:
+    elif text == "how are you":
         responses = responses + "I'm fine sir"
 
-    elif "Who are you" in text:
+    elif text == "who are you":
         responses = responses + "I am PyAsst created by Miles"
     
-    elif 'wikipedia' in text:
+    elif 'Wikipedia' in text:
         assistantResponse('Searching Wikipedia...please wait')
-        text = text.replace("wikipedia", "")
-        results =  wikipedia.summary(text, sentences = 2)
-        assistantResponse("wikipedia says")
-        assistantResponse(results)
+        text = text.replace("Search wikipedia for ", " ")
+        engine.say(text)
+        result =  wikipedia.search(text)
+        results = wikipedia.summary(text)
+        print(results)
+        responses = responses + "wikipedia says" + results
+
+    
+        
+        
     
     else:
         responses = responses + "I'm sorry i can't do that yet" 
