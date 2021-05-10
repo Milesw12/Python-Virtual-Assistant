@@ -9,6 +9,7 @@ import getpass
 import wikipedia
 import webbrowser
 import os
+from weather import weatherCheck
 
 #engine set up
 engine = pyttsx3.init()
@@ -136,14 +137,20 @@ while True:
         print("please say what you want to search for on wikipedia")
         assistantResponse('Please say what you want to search for on wikipedia')
         request = recordAudio()
-        assistantResponse('Searching Wikipedia...please wait')
-        engine.say(request)
-        text = wikipedia.page(request)
-        print(text.content)
-        responses = responses + text.content
+        if 'cancel' in request:
+            break
+        else:
+            assistantResponse('Searching Wikipedia...please wait')
+            engine.say(request)
+            text = wikipedia.page(request)
+            print(text.content)
+            responses = responses + text.content
 
 
-    
+    elif 'weather' in text:
+        weatherCheck()
+        
+
         
         
     
