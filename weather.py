@@ -36,7 +36,7 @@ def weatherCheck():
     weather_description = z[0]["description"]
   
     # print following values
-    print(" Temperature (in kelvin unit) = " +
+    output = (" Temperature (in kelvin unit) = " +
                     str(current_temperature) + 
           "\n atmospheric pressure (in hPa unit) = " +
                     str(current_pressure) +
@@ -44,5 +44,7 @@ def weatherCheck():
                     str(current_humidity) +
           "\n description = " +
                     str(weather_description))
+    print(output)
+    return output
 
 weatherCheck()

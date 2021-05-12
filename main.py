@@ -149,7 +149,8 @@ while True:
 
     elif 'weather' in text:
         weatherCheck()
-        
+        output = weatherCheck()
+        assistantResponse(output)
 
         
         
