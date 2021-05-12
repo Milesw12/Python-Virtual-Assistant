@@ -9,7 +9,7 @@ import getpass
 import wikipedia
 import webbrowser
 import os
-from weather import weatherCheck
+
 
 #engine set up
 engine = pyttsx3.init()
@@ -113,6 +113,7 @@ def WishMe():
 
 WishMe()
 
+
 while True:
     text = recordAudio()
     responses = ''
@@ -147,10 +148,10 @@ while True:
             responses = responses + text.content
 
 
-    elif 'weather' in text:
-        weatherCheck()
-        output = weatherCheck()
-        assistantResponse(output)
+    elif 'break' or 'stop' or 'bye' in text:
+        print("goodbye!")
+        assistantResponse("goodbye!")
+        quit
 
         
         
