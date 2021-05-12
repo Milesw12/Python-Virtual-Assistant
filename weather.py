@@ -7,7 +7,7 @@ def weatherCheck():
     LATITUDE = os.getenv('LATITUDE')
     LONGITUDE = os.getenv('LONGITUDE')
     API_KEY = os.getenv('WEATHER_API_KEY')
-    url = "http://api.openweathermap.org/data/2.5/weather?lat="+ LATITUDE + "&lon=" + LONGITUDE + "appid="+ API_KEY 
+    url = "http://api.openweathermap.org/data/2.5/weather?lat="+ LATITUDE + "&lon=" + LONGITUDE + "&appid="+ API_KEY 
     reply = requests.get(url)
     x = reply.json()
     # store the value of "main"
