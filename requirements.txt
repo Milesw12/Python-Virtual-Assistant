@@ -1,4 +1,4 @@
-speech_recognition
+speechRecognition
 pyttsx3
 pyaudio
 wikipedia
