@@ -11,7 +11,15 @@ import wikipedia
 import webbrowser
 import os
 import sys
+import ctypes
+import locale
 
+#Pull locale from System to provide best experience
+Region="en_UK"
+if os.name != 'posix':
+    windll = ctypes.windll.kernel32
+    windll.GetUserDefaultUILanguage()
+    Region = locale.windows_locale[ windll.GetUserDefaultUILanguage() ]
 
 #engine set up
 #initalising the text to speech engine 
@@ -62,7 +70,7 @@ def recordAudio():
         assistantResponse(output)
     #If recogniser is unable to process the audio, the error messages are caught and replaced with a user friendly explaination
     except sr.UnknownValueError:
-        output = ("Oops! Didn't catch that, say that again sir.")
+        output = ("Oops! Didn't catch that, say that again.")
         print(output)
         assistantResponse(output)
     except sr.RequestError as e:
